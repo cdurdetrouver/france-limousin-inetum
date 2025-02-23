@@ -1,0 +1,59 @@
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/srcs:/app
+    networks:
+      - app-network
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=main.py
+
+  db:
+    container_name: db
+    image: mysql:5.7
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u $$MYSQL_USER --password=$$MYSQL_PASSWORD"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpressuser
+      MYSQL_PASSWORD: wordpresspassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./db:/var/lib/mysql
+      - ./db_backup.sql:/docker-entrypoint-initdb.d/db_backup.sql
+    networks:
+      - app-network
+
+  wordpress:
+    container_name: wordpress
+    image: wordpress:latest
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpressuser
+      WORDPRESS_DB_PASSWORD: wordpresspassword
+      WORDPRESS_DB_NAME: wordpress
+    ports:
+      - "8080:80"
+    volumes:
+      - ./wordpress:/var/www/html
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
