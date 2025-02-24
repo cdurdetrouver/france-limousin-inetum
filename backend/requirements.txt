@@ -1,7 +1,8 @@
 Flask==2.1.1
 Werkzeug==2.0.1
 matplotlib==3.10.0
-pandas
+pandas==2.2.3
 numpy
-os
-io
+scikit-learn
+catboost
+xgboost
