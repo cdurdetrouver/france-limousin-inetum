@@ -4,7 +4,7 @@
 
 	const toastStore = getToastStore();
 
-	let display_mode = 2;
+	let display_mode = 0;
 
 	let idanimal: string;
 	let prediction: {
