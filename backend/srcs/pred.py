@@ -11,8 +11,11 @@ FEATURTES_LIBECO3 = ['IFNAIS', 'CRSEVS', 'DMSEVS', 'DSSEVS', 'ISEVRE', 'IFVELA',
                 'COMPSS', 'CONFJF', 'FOSPSS', 'cifnai', 'ccrsev', 'cdmsev', 'cdssev', 'cfosse', 
                 'cavels', 'calait']
 FEATURTES_ENCHERE = ['LIBECO2_RJ', 'ROB', 'HAR', 'CAENST']
-FEATURTES_PNC =  ['RAVELA', 'CONAIS_COCOFG', 'ID_M_PRODUIT']
-FEATURTES_P210 =  ['CRSEVS', 'DMSEVS', 'DSSEVS', 'ccrsev', 'cdmsev', 'cdssev', 'RAVELA', 'ETAT']
+FEATURTES_PNC =   ['COFGMU', 'RAVELA', 'CONAIS_COCOFG', 'ID_MERE', 'TOUPOI']
+FEATURTES_P210 =  ['CRSEVS', 'DM_sev', 'DS_sev', 'ccrsev', 'cdmsev', 'cdssev', 'RAVELA', 'ETAT', 'FOSEVS', 'ISEVRE', 'PONAIS', 'cfosse',
+                    'DEE', 'ARC', 'LAC', 'LOC', 'DM', 'GRC', 'LOD', 'LOB',
+                     'LAH', 'DEV', 'LAT', 'LAI', 'DS', 'LAM', 'AAV',
+                     'ANS', 'LOS', 'EPT', 'RED', 'PAS', 'AF', 'ETE', 'ROB', 'QR',  'ETA', 'PRP', 'LAP', 'COM']
 
 def pred(animal_id):
         
@@ -46,18 +49,18 @@ def pred(animal_id):
                 "enchere_model.pkl",
                 FEATURTES_ENCHERE
         ))
-        
-        # result["p_pnc"] = prediction(
-        #     categorie_variables(variables_animal),
-        #     "pnc_model.pkl",
-        #     FEATURTES_PNC
-        # )
 
-        # result["p_p210"] = prediction(
-        #     categorie_variables(variables_animal),
-        #     "p210_model.pkl",
-        #     FEATURTES_P210
-        # )
+        result["p_pnc"] = prediction(
+            categorie_variables(variables_animal),
+            "ponais_model.pkl",
+            FEATURTES_PNC
+        )
+
+        result["p_p210"] = prediction(
+            categorie_variables(variables_animal),
+            "p210_model.pkl",
+            FEATURTES_P210
+        )
         
         return result
         
@@ -98,12 +101,3 @@ def prediction(variables_animal, model_name, features):
                 return None
 
         return model.predict(variables_animal[features])[0]
-
-def main():
-        result = pred(int("019337"))
-        result = {key: str(value) for key, value in result.items()}
-
-        result = json.dumps(result)
-        print(result)
-
-main()

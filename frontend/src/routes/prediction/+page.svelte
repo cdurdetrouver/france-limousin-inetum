@@ -19,7 +19,7 @@
 
 	async function request(idanimal: string) {
 		try {
-			const response = await fetch('http://localhost:5000/pred', {
+			const response = await fetch('http://localhost:5000/prediction_id', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -45,8 +45,8 @@
 
 			const data = await response.json();
 			prediction = {
-				labeco2: data['p_labeco2'],
-				labeco3: data['p_labeco3'],
+				labeco2: data['p_libeco2'],
+				labeco3: data['p_libeco3'],
 				naissance: data['p_pnc'],
 				poids: data['p_p210'],
 				prix: data['p_enchere']
