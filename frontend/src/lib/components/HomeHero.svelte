@@ -5,7 +5,7 @@
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-10 items-center justify-center">
 	<div class="flex flex-col items-center xl:items-start text-center xl:text-left space-y-4 mt-40">
 		<h1 class="h1 !text-5xl md:!text-6xl max-w-[600px]">
-			Prédiction de Sélection bovine assisté par <span class="gradient-heading">IA</span>.
+			Prédiction de Sélection bovine assistée par <span class="gradient-heading">IA</span>.
 		</h1>
 		<p class="!text-xl max-w-[475px]">
 			Optimisez votre élevage avec notre IA capable d’identifier les meilleurs taureaux
