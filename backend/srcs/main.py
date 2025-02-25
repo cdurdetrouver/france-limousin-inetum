@@ -1,12 +1,5 @@
-from flask import Flask, send_file, request, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
-import matplotlib.pyplot as plt
-import io
-import pandas as pd
-import numpy as np
-import pickle
-from sklearn.linear_model import LinearRegression
 from pred import pred
 import json
 

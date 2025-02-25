@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ProgressBar } from '@skeletonlabs/skeleton';
 	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+	import Icon from '@iconify/svelte';
 
 	const toastStore = getToastStore();
 
@@ -8,12 +9,12 @@
 
 	let idanimal: string;
 	let prediction: {
-		labeco2: string;
-		labeco3: string;
-		naissance: number;
-		poids: number;
-		prix: number;
-	} = { labeco2: '', labeco3: '', naissance: 0, poids: 0, prix: 0 };
+		libeco2: string;
+		libeco3: string;
+		naissance: string;
+		poids: string;
+		prix: string;
+	} = { libeco2: 'None', libeco3: 'None', naissance: 'None', poids: 'None', prix: 'None' };
 
 	let start_time: number;
 
@@ -45,9 +46,9 @@
 
 			const data = await response.json();
 			prediction = {
-				labeco2: data['p_libeco2'],
-				labeco3: data['p_libeco3'],
-				naissance: data['p_pnc'],
+				libeco2: data['p_libeco2'],
+				libeco3: data['p_libeco3'],
+				naissance: data['p_ponais'],
 				poids: data['p_p210'],
 				prix: data['p_enchere']
 			};
@@ -92,6 +93,14 @@
 			}
 		});
 	}
+
+	function round(str: string) {
+		return Math.round(parseFloat(str.replace(/[^\d.-]/g, '')));
+	}
+
+	function round100(nbr: number) {
+		return Math.round(nbr / 100) * 100;
+	}
 </script>
 
 <div class="h-full flex items-center justify-center">
@@ -115,23 +124,53 @@
 		</div>
 	{:else if display_mode == 2}
 		<div class="flex flex-col gap-10 items-center justify-between">
-			<div class="card card-hover overflow-hidden text-2xl">
-				<header>
-					<img
-						src="champ.jpg"
-						class="bg-black/50 h-full aspect-[21/9] overflow-hidden"
-						alt="Post"
-					/>
+			<div class="card card-hover overflow-hidden w-100 text-2xl">
+				<header class="h-[300px] overflow-hidden">
+					<img src="champ.jpg" class="bg-black/50 h-[300px] w-auto" alt="Post" />
 				</header>
 				<div class="p-4 space-y-4">
 					<h6 class="h3" data-toc-ignore>Prédiction</h6>
 					<h3 class="h2" data-toc-ignore>Animal id : {idanimal}</h3>
 					<article>
-						<p>Libeco2 : {prediction.labeco2}</p>
-						<p>Libeco3 : {prediction.labeco3}</p>
-						<p>Poids à la naissance : {prediction.naissance}</p>
-						<p>Poids 210 jours : {prediction.poids}</p>
-						<p>Prix : {prediction.prix}</p>
+						<p class="flex items-center gap-3">
+							Qualification en station : {#if prediction.libeco2 == 'None'}
+								<Icon icon="emojione-v1:cross-mark" width="16" height="16" />
+							{:else if prediction.libeco2 == '1'}
+								RJ
+							{:else}
+								Espoir
+							{/if}
+						</p>
+						<p class="flex items-center gap-3">
+							Qualification raciale : {#if prediction.libeco3 == 'None'}
+								<Icon icon="emojione-v1:cross-mark" width="16" height="16" />
+							{:else if prediction.libeco3 == '1'}
+								RRE
+							{:else}
+								RR
+							{/if}
+						</p>
+						<p class="flex items-center gap-3">
+							Poids à la naissance : {#if prediction.naissance == 'None'}
+								<Icon icon="emojione-v1:cross-mark" width="16" height="16" />
+							{:else}
+								{round(prediction.naissance)} kg
+							{/if}
+						</p>
+						<p class="flex items-center gap-3">
+							Poids 210 jours : {#if prediction.poids == 'None'}
+								<Icon icon="emojione-v1:cross-mark" width="16" height="16" />
+							{:else}
+								{round(prediction.poids)} kg
+							{/if}
+						</p>
+						<p class="flex items-center gap-3">
+							Prix : {#if prediction.prix == 'None'}
+								<Icon icon="emojione-v1:cross-mark" width="16" height="16" />
+							{:else}
+								{round100(round(prediction.prix))} €
+							{/if}
+						</p>
 					</article>
 				</div>
 			</div>

@@ -2,23 +2,26 @@ import os
 import pandas as pd
 import pickle
 import numpy as np
-import json
 
 FEATURTES_LIBECO2 = ['IFNAIS', 'CRSEVS', 'DMSEVS', 'DSSEVS', 'IFVELA', 'ALAITS', 'CONFJF',
                 'cifnai', 'ccrsev', 'cdmsev', 'cdssev', 'cfosse', 'cavels', 'calait',
                 'IDQRSE']
+
 FEATURTES_LIBECO3 = ['IFNAIS', 'CRSEVS', 'DMSEVS', 'DSSEVS', 'ISEVRE', 'IFVELA', 'ALAITS', 'IVMATE', 
                 'COMPSS', 'CONFJF', 'FOSPSS', 'cifnai', 'ccrsev', 'cdmsev', 'cdssev', 'cfosse', 
                 'cavels', 'calait']
-FEATURTES_ENCHERE = ['LIBECO2_RJ', 'ROB', 'HAR', 'CAENST']
-FEATURTES_PNC =   ['COFGMU', 'RAVELA', 'CONAIS_COCOFG', 'ID_MERE', 'TOUPOI']
+
+FEATURTES_ENCHERE = [['LIBECO2_RJ', 'CAENST', 'LAC', 'HAR'], ['LIBECO2_RJ', 'CAENST', 'IDQRSE']]
+MODELS_ENCHERE = ["enchere_model.pkl", "enchere_model_2.pkl"]
+
+FEATURTES_PONAIS =   ['COFGMU', 'RAVELA', 'CONAIS_COCOFG', 'ID_MERE', 'TOUPOI']
+
 FEATURTES_P210 =  ['CRSEVS', 'DM_sev', 'DS_sev', 'ccrsev', 'cdmsev', 'cdssev', 'RAVELA', 'ETAT', 'FOSEVS', 'ISEVRE', 'PONAIS', 'cfosse',
                     'DEE', 'ARC', 'LAC', 'LOC', 'DM', 'GRC', 'LOD', 'LOB',
                      'LAH', 'DEV', 'LAT', 'LAI', 'DS', 'LAM', 'AAV',
                      'ANS', 'LOS', 'EPT', 'RED', 'PAS', 'AF', 'ETE', 'ROB', 'QR',  'ETA', 'PRP', 'LAP', 'COM']
 
 def pred(animal_id):
-        
         df_taureaux = pd.read_csv("data/DATA_TAUREAUX_ANO.txt", sep=";", low_memory=False)
 
         # Vérifier si l'ID existe dans le DataFrame
@@ -26,44 +29,60 @@ def pred(animal_id):
 
         # Récupérer toutes les colonnes de l'animal
         variables_animal = animal_data.iloc[[0]]
-    
-    
+
         result = {}
-        
-        result["p_libeco2"] = prediction(
-            variables_animal,
-            "libeco2_model.pkl",
-            FEATURTES_LIBECO2
-        )
-        
-        result["p_libeco3"] = prediction(
-            categorie_variables(variables_animal),
-            "libeco3_model.pkl",
-            FEATURTES_LIBECO3
-        )
-        
+
+        try :
+                result["p_libeco2"] = prediction(
+                        variables_animal,
+                        "libeco2_model.pkl",
+                        FEATURTES_LIBECO2
+                )
+        except :
+                result["p_libeco2"] = None
+
+        try :
+                result["p_libeco3"] = prediction(
+                        categorie_variables(variables_animal),
+                        "libeco3_model.pkl",
+                        FEATURTES_LIBECO3
+                )
+        except :
+                result["p_enchere"] = None
+
         variables_animal = variables_animal.copy()
         variables_animal['LIBECO2_RJ'] = result["p_libeco2"]
-        result["p_enchere"] =  np.expm1(prediction(
-                variables_animal,
-                "enchere_model.pkl",
-                FEATURTES_ENCHERE
-        ))
+        for i in range(len(MODELS_ENCHERE)):
+                try :
+                        result["p_enchere"] =  np.expm1(prediction(
+                                variables_animal,
+                                MODELS_ENCHERE[i],
+                                FEATURTES_ENCHERE[i]
+                        ))
+                        break
+                except :
+                        result["p_enchere"] = None
 
-        result["p_pnc"] = prediction(
-            categorie_variables(variables_animal),
-            "ponais_model.pkl",
-            FEATURTES_PNC
-        )
+        try :
+                result["p_ponais"] = prediction(
+                        categorie_variables(variables_animal),
+                        "ponais_model.pkl",
+                        FEATURTES_PONAIS
+                )
+        except :
+                result["p_ponais"] = None
 
-        result["p_p210"] = prediction(
-            categorie_variables(variables_animal),
-            "p210_model.pkl",
-            FEATURTES_P210
-        )
-        
+        try :
+                result["p_p210"] = prediction(
+                        categorie_variables(variables_animal),
+                        "p210_model.pkl",
+                        FEATURTES_P210
+                )
+        except :
+                result["p_p210"] = None
+
         return result
-        
+
 def categorie_variables(variables_animal):
         for column in variables_animal.columns:
                 if variables_animal[column].dtypes == 'object':
@@ -73,7 +92,7 @@ def categorie_variables(variables_animal):
                         # Si la colonne devrait être numérique, la convertir en numérique
                         variables_animal = variables_animal.copy()
                         variables_animal.loc[:, column] = pd.to_numeric(variables_animal[column], errors='coerce')
-                
+
         return variables_animal
 
 def load_model(model_name):
