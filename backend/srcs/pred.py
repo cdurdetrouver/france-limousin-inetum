@@ -103,7 +103,7 @@ def load_model(model_name):
         except Exception as e:
                 print(f"Erreur lors du chargement du modèle {model_name} : {e}")
                 return None
-        
+
 
 def prediction(variables_animal, model_name, features):
         model = load_model(model_name)

@@ -144,10 +144,12 @@
 						<p class="flex items-center gap-3">
 							Qualification raciale : {#if prediction.libeco3 == 'None'}
 								<Icon icon="emojione-v1:cross-mark" width="16" height="16" />
+							{:else if prediction.libeco3 == '0'}
+								Non classé
 							{:else if prediction.libeco3 == '1'}
-								RRE
-							{:else}
 								RR
+							{:else}
+								RRE
 							{/if}
 						</p>
 						<p class="flex items-center gap-3">
