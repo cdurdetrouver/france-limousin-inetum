@@ -16,10 +16,7 @@ MODELS_ENCHERE = ["enchere_model.pkl", "enchere_model_2.pkl"]
 
 FEATURTES_PONAIS =   ['COFGMU', 'RAVELA', 'CONAIS_COCOFG', 'ID_MERE', 'TOUPOI']
 
-FEATURTES_P210 =  ['CRSEVS', 'DM_sev', 'DS_sev', 'ccrsev', 'cdmsev', 'cdssev', 'RAVELA', 'ETAT', 'FOSEVS', 'ISEVRE', 'PONAIS', 'cfosse',
-                    'DEE', 'ARC', 'LAC', 'LOC', 'DM', 'GRC', 'LOD', 'LOB',
-                     'LAH', 'DEV', 'LAT', 'LAI', 'DS', 'LAM', 'AAV',
-                     'ANS', 'LOS', 'EPT', 'RED', 'PAS', 'AF', 'ETE', 'ROB', 'QR',  'ETA', 'PRP', 'LAP', 'COM']
+FEATURTES_P210 =   ['CRSEVS', 'DM_sev', 'DS_sev', 'ccrsev', 'cdmsev', 'cdssev', 'RAVELA', 'ETAT', 'FOSEVS', 'ISEVRE', 'PONAIS', 'cfosse']
 
 def pred(animal_id):
         df_taureaux = pd.read_csv("data/DATA_TAUREAUX_ANO.txt", sep=";", low_memory=False)

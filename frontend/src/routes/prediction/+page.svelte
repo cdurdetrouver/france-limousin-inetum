@@ -130,7 +130,7 @@
 				</header>
 				<div class="p-4 space-y-4">
 					<h6 class="h3" data-toc-ignore>Prédiction</h6>
-					<h3 class="h2" data-toc-ignore>Animal id : {idanimal}</h3>
+					<h3 class="h2" data-toc-ignore>Animal id : FR{idanimal}</h3>
 					<article>
 						<p class="flex items-center gap-3">
 							Qualification en station : {#if prediction.libeco2 == 'None'}

@@ -3,7 +3,7 @@ Werkzeug==2.0.1
 matplotlib==3.10.0
 pandas==2.2.3
 numpy
-scikit-learn
+scikit-learn==1.6.1
 catboost
 xgboost
 flask_cors
