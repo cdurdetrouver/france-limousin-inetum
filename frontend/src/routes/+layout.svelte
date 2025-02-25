@@ -20,7 +20,7 @@
 			<svelte:fragment slot="trail">
 				<a
 					class="btn btn-sm bg-white"
-					href="https://github.com/skeletonlabs/skeleton"
+					href="https://github.com/cdurdetrouver/france-limousin-inetum"
 					target="_blank"
 					rel="noreferrer"
 				>
